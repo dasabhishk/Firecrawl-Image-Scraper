@@ -1,0 +1,38 @@
+You are an expert Python developer. Generate a complete minimal Streamlit application that scrapes image URLs from a user-provided webpage using the Firecrawl API and presents them in a dark, minimal UI. Follow these constraints:
+
+1. Project layout:
+   - app.py (Streamlit entry)
+   - firecrawl_client.py (Firecrawl wrapper: `FirecrawlClient` + `extract_image_urls_from_html`)
+   - cache_utils.py (small in-memory TTL cache using cachetools)
+   - requirements.txt
+   - README.md with run instructions
+
+2. Functional requirements:
+   - Sidebar: secure text input for Firecrawl API key.
+   - Main UI: URL input and a Submit button in a form.
+   - Use Firecrawl `/v1/scrape` HTTP POST (or the official `firecrawl-py` SDK if you prefer), include Authorization header `Bearer <api_key>`.
+   - Request HTML (scrapeOptions/formats: ["html"] if using payload).
+   - Parse returned HTML to collect image URLs from: `src`, `data-src`, `data-lazy-src`, and the first entry of `srcset`.
+   - Convert relative URLs to absolute using urljoin.
+   - Deduplicate and preserve order.
+   - Cache results per api_key+url (TTL 10 min).
+   - Provide a "Copy all" copy-to-clipboard button using `st-copy-to-clipboard` if available; otherwise provide a downloadable `.txt` fallback and display the URLs in a multiline field.
+   - Minimal error handling: invalid url, missing api_key, HTTP errors (401, 429, timeouts) with friendly messages.
+   - Do not persist API keys to disk; keep in session_state only.
+
+3. Non-functional requirements:
+   - Keep code DRY and KISS.
+   - Minimal output verbosity: no unnecessary logging. If any logging is present, ensure API key is masked.
+   - Dark minimal UI via inline CSS or Streamlit theme variables.
+   - Provide `requirements.txt` with precise packages: streamlit, requests, beautifulsoup4, validators, cachetools, st-copy-to-clipboard (optional).
+
+4. Tests:
+   - Provide a small `tests/test_extract.py` with unit tests for `extract_image_urls_from_html()` using pytest and sample HTML.
+
+5. README:
+   - How to install, run locally (`pip install -r requirements.txt`, `streamlit run app.py`), and note the need for HTTPS for clipboard usage when deployed publicly.
+
+6. Output format:
+   - Return the files as plain code blocks with filenames as headings. Do not include extra commentary.
+
+Generate the complete project now.
